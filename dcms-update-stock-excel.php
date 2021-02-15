@@ -16,6 +16,7 @@ namespace dcms\update;
 
 use dcms\update\includes\Submenu;
 use dcms\update\includes\Enqueue;
+use dcms\update\includes\Configuration;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -38,6 +39,7 @@ final class Loader{
 	public function load_includes(){
 		include_once ( DCMS_UPDATE_PATH . '/includes/submenu.php');
 		include_once ( DCMS_UPDATE_PATH . '/includes/enqueue.php');
+		include_once ( DCMS_UPDATE_PATH . '/includes/configuration.php');
 	}
 
 	// Load tex domain
@@ -65,6 +67,7 @@ final class Loader{
 		$this->add_link_plugin();
 		new SubMenu();
 		new Enqueue();
+		new Configuration();
 	}
 
 }
@@ -72,3 +75,11 @@ final class Loader{
 $dcms_update_process = new Loader();
 $dcms_update_process->init();
 
+
+#TODO
+# - Pantalla de configuración, ruta de archivo y columnas de archivo
+# - sku, stock, filtro, variable
+# - llenar todo en una tabla de BD
+# - En la tabla debe haber una columna de concluído
+# - Verificar fecha del archivo en caso cambie para hacer de nuevo el proceso
+# - Configurar el cron de WordPress
