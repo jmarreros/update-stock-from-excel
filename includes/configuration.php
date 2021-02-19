@@ -32,9 +32,19 @@ class Configuration{
 
         // Excel Fields section
         add_settings_section('dcms_usexcel_section_excel',
-                            __('Excel Columns','dcms-update-stock-excel'),
+                            __('Excel Structure','dcms-update-stock-excel'),
                             [$this,'dcms_section_cb'],
                             'dcms_usexcel_sfields' );
+
+        add_settings_field('dcms_usexcel_sheet_field',
+                            __('Sheet Number','dcms-update-stock-excel'),
+                            [$this, 'dcms_section_input_cb'],
+                            'dcms_usexcel_sfields',
+                            'dcms_usexcel_section_excel',
+                            ['label_for' => 'dcms_usexcel_sheet_field',
+                                'description' => __('Enter a sheet page number','dcms-update-stock-excel'),
+                                'required' => true]
+        );
 
         add_settings_field('dcms_usexcel_sku_field',
                             __('SKU column name','dcms-update-stock-excel'),
@@ -54,12 +64,12 @@ class Configuration{
                             'required' => true]
         );
 
-        add_settings_field('dcms_usexcel_variant_field',
-                            __('Variant column name','dcms-update-stock-excel'),
+        add_settings_field('dcms_usexcel_price_field',
+                            __('Price column name','dcms-update-stock-excel'),
                             [$this, 'dcms_section_input_cb'],
                             'dcms_usexcel_sfields',
                             'dcms_usexcel_section_excel',
-                            ['label_for' => 'dcms_usexcel_variant_field']
+                            ['label_for' => 'dcms_usexcel_price_field']
         );
 
         add_settings_field('dcms_usexcel_isweb_field',
@@ -98,12 +108,14 @@ class Configuration{
     public function dcms_validate_cb($input){
         $output = array();
 
+        // Sanitization
         foreach( $input as $key => $value ) {
             if( isset( $input[$key] ) ) {
                 $output[$key] = strip_tags( $input[ $key ] );
             }
         }
 
+        // Validation
         $path_file = $output['dcms_usexcel_input_file'];
 
         // Validate file path
@@ -112,7 +124,7 @@ class Configuration{
         // validate columns
         $this->validate_columns_file($path_file);
 
-        return apply_filters( 'dcms_validate_inputs', $output, $input );
+        return $output;
     }
 
 
@@ -125,11 +137,14 @@ class Configuration{
 
     // Validate that columns' file exists
     private function validate_columns_file($path_file){
+        $readfile = new Readfile($path_file);
+
+        $headers = $readfile->get_header();
+
+        if ( ! $headers ) {
+            add_settings_error( 'dcms_messages', 'dcms_file_error', __( 'Headers columns in .xls file doesn\'t exists', 'dcms-update-stock-excel' ), 'error' );
+        }
+
 
     }
 }
-
-
-# TODO
-# Validate settings: https://code.tutsplus.com/tutorials/the-wordpress-settings-api-part-7-validation-sanitisation-and-input--wp-25289
-# add_settings_error( 'dcms_messages', 'dcms_messages', __( 'Settings Error xxx', 'dcms-update-stock-excel' ), 'error' );

@@ -14,6 +14,7 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.txt
 
 namespace dcms\update;
 
+use dcms\update\includes\Plugin;
 use dcms\update\includes\Submenu;
 use dcms\update\includes\Enqueue;
 use dcms\update\includes\Configuration;
@@ -38,10 +39,12 @@ final class Loader{
 
 	// Load all the files we need
 	public function load_includes(){
+		include_once ( DCMS_UPDATE_PATH . '/includes/plugin.php');
 		include_once ( DCMS_UPDATE_PATH . '/includes/submenu.php');
 		include_once ( DCMS_UPDATE_PATH . '/includes/enqueue.php');
 		include_once ( DCMS_UPDATE_PATH . '/includes/configuration.php');
 		include_once ( DCMS_UPDATE_PATH . '/includes/readfile.php');
+		include_once ( DCMS_UPDATE_PATH . '/libs/simplexlsx.php');
 	}
 
 	// Load tex domain
@@ -67,6 +70,7 @@ final class Loader{
 		$this->load_includes();
 		$this->load_domain();
 		$this->add_link_plugin();
+		new Plugin();
 		new SubMenu();
 		new Enqueue();
 		new Configuration();
