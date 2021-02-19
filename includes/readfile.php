@@ -15,16 +15,20 @@ class Readfile{
     }
 
     // Get header file
-    public function get_header(){
-        $options = get_option( 'dcms_usexcel_options' ); // Get sheet number
-        $sheet = $options['dcms_usexcel_sheet_field'];
+    public function get_header( $sheet_number = false){
 
-        $rows = $this->xlsx->rows($sheet);
+        if ( $sheet_number === false ){
+            $options = get_option( 'dcms_usexcel_options' ); // Get sheet number from database
+            $sheet_number = $options['dcms_usexcel_sheet_field'];
+        }
+
+        $rows = $this->xlsx->rows($sheet_number);
 
         if ( ! isset($rows[0]) ) return false;
 
         return $rows[0];
     }
+
 
 }
 

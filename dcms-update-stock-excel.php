@@ -83,8 +83,6 @@ $dcms_update_process->init();
 
 
 #TODO
-# - Pantalla de configuración, ruta de archivo y columnas de archivo
-# - sku, stock, filtro, variable
 # - llenar todo en una tabla de BD
 # - En la tabla debe haber una columna de concluído
 # - Verificar fecha del archivo en caso cambie para hacer de nuevo el proceso

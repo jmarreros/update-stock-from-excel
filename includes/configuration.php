@@ -122,7 +122,7 @@ class Configuration{
         $this->validate_path_file($path_file);
 
         // validate columns
-        $this->validate_columns_file($path_file);
+        $this->validate_columns_file($path_file, $output);
 
         return $output;
     }
@@ -136,15 +136,34 @@ class Configuration{
     }
 
     // Validate that columns' file exists
-    private function validate_columns_file($path_file){
-        $readfile = new Readfile($path_file);
+    private function validate_columns_file($path_file, $output){
 
-        $headers = $readfile->get_header();
+        // Get input column values
+        $sheet_number = $output['dcms_usexcel_sheet_field'];
+
+        $columns = [];
+        $columns['SKU']     = $output['dcms_usexcel_sku_field'];
+        $columns['Stock']   = $output['dcms_usexcel_stock_field'];
+        $columns['Price']   = $output['dcms_usexcel_price_field'];
+        $columns['Web']   = $output['dcms_usexcel_isweb_field'];
+
+
+        // Read file and validate sheet_number headers
+        $readfile = new Readfile($path_file);
+        $headers = $readfile->get_header($sheet_number);
 
         if ( ! $headers ) {
             add_settings_error( 'dcms_messages', 'dcms_file_error', __( 'Headers columns in .xls file doesn\'t exists', 'dcms-update-stock-excel' ), 'error' );
+            return false;
         }
 
+        // Validate each header
+        foreach ($columns as $key => $column) {
+            if ( ! empty($column) &&  ! in_array($column, $headers) ){
+                add_settings_error( 'dcms_messages', 'dcms_file_error', __( $key .' column "'. $column . '" doesn\'t exists  in .xls file', 'dcms-update-stock-excel' ), 'error' );
+            }
+        }
 
     }
+
 }
