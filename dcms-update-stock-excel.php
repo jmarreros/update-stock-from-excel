@@ -17,6 +17,7 @@ namespace dcms\update;
 use dcms\update\includes\Submenu;
 use dcms\update\includes\Enqueue;
 use dcms\update\includes\Configuration;
+use dcms\update\includes\Readfile;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -40,6 +41,7 @@ final class Loader{
 		include_once ( DCMS_UPDATE_PATH . '/includes/submenu.php');
 		include_once ( DCMS_UPDATE_PATH . '/includes/enqueue.php');
 		include_once ( DCMS_UPDATE_PATH . '/includes/configuration.php');
+		include_once ( DCMS_UPDATE_PATH . '/includes/readfile.php');
 	}
 
 	// Load tex domain

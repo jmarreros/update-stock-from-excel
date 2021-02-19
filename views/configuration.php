@@ -10,7 +10,7 @@ settings_errors( 'dcms_messages' );
 ?>
 
 <div class="wrap">
-<h2><?php _e('Update Stock WooCommerce from Excel', 'dcms-update-stock-excel') ?></h2>
+<h1><?php _e('Update Stock WooCommerce from Excel', 'dcms-update-stock-excel') ?></h1>
 
 <form action="options.php" method="post">
     <?php
