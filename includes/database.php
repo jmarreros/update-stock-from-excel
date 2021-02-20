@@ -3,19 +3,36 @@
 namespace dcms\update\includes;
 
 class Database{
-    public function create_table(){
-        global $wpdb;
+    private $wpdb;
+    private $table_name;
 
-        $table_name = $wpdb->prefix . 'dcms_update_stock';
+    public function __construct(){
+        global $wpdb;
+        $this->wpdb = $wpdb;
+
+        $this->table_name = $this->wpdb->prefix . 'dcms_update_stock';
+    }
+
+    // Init activation create table
+    public function create_table(){
+        $sql = "DROP TABLE IF EXISTS {$this->table_name};
+                CREATE TABLE {$this->table_name} (
+                    `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+                    `sku` varchar(50) COLLATE {$this->wpdb->collate} NOT NULL DEFAULT '',
+                    `stock` int(10) unsigned NOT NULL DEFAULT '0',
+                    `price` decimal(6,2) NOT NULL DEFAULT '0.00',
+                    `date_update` datetime DEFAULT NULL,
+                    `date_file` int(10) unsigned NOT NULL DEFAULT '0',
+                    `updated` tinyint(1) DEFAULT '0',
+                    PRIMARY KEY (`id`)
+          ) COLLATE={$this->wpdb->collate};
+        ";
+
+        require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+
+        dbDelta($sql);
     }
 }
 
-// DROP TABLE IF EXISTS `wp_dcms_update_stock`;
-// CREATE TABLE `wp_dcms_update_stock` (
-//     `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-//     `stock` int(10) unsigned NOT NULL DEFAULT '0',
-//     `price` decimal(6,2) NOT NULL DEFAULT '0.00',
-//     `date_update` datetime DEFAULT NULL,
-//     `date_file` int(10) unsigned NOT NULL DEFAULT '0',
-//     PRIMARY KEY (`id`)
-//   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+
+// CREATE TABLE IF NOT EXISTS

@@ -17,7 +17,7 @@ class Plugin{
         $options = get_option( 'dcms_usexcel_options' );
 
         if ( empty($options) ){
-             $options = [
+            $options = [
                          'dcms_usexcel_input_file'  => '/home/public_html/file.xlsx',
                          'dcms_usexcel_sheet_field' => '3',
                          'dcms_usexcel_sku_field'	=> 'Sku',
@@ -34,8 +34,9 @@ class Plugin{
             update_option('dcms_last_modified_file', 0);
         }
 
-        // TODO
-        // Database initialization
+        // Create table
+        $db = new Database();
+        $db->create_table();
     }
 
 }
