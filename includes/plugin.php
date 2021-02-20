@@ -2,6 +2,8 @@
 
 namespace dcms\update\includes;
 
+use dcms\update\includes\Database;
+
 class Plugin{
 
     public function __construct(){
@@ -24,6 +26,12 @@ class Plugin{
                          'dcms_usexcel_isweb_field' => 'Web'
                  ];
             update_option('dcms_usexcel_options', $options);
+        }
+
+
+        $modified = get_option('dcms_last_modified_file');
+        if ( empty($modified) ){
+            update_option('dcms_last_modified_file', 0);
         }
 
         // TODO

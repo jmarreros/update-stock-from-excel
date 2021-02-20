@@ -19,6 +19,8 @@ use dcms\update\includes\Submenu;
 use dcms\update\includes\Enqueue;
 use dcms\update\includes\Configuration;
 use dcms\update\includes\Readfile;
+use dcms\update\includes\Process;
+
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -44,6 +46,8 @@ final class Loader{
 		include_once ( DCMS_UPDATE_PATH . '/includes/enqueue.php');
 		include_once ( DCMS_UPDATE_PATH . '/includes/configuration.php');
 		include_once ( DCMS_UPDATE_PATH . '/includes/readfile.php');
+		include_once ( DCMS_UPDATE_PATH . '/includes/database.php');
+		include_once ( DCMS_UPDATE_PATH . '/includes/process.php');
 		include_once ( DCMS_UPDATE_PATH . '/libs/simplexlsx.php');
 	}
 
@@ -74,6 +78,7 @@ final class Loader{
 		new SubMenu();
 		new Enqueue();
 		new Configuration();
+		new Process();
 	}
 
 }
@@ -83,6 +88,8 @@ $dcms_update_process->init();
 
 
 #TODO
+# - Comprobar si el archivo esta actualizado
+# - Hacer la actualización manualmente
 # - llenar todo en una tabla de BD
 # - En la tabla debe haber una columna de concluído
 # - Verificar fecha del archivo en caso cambie para hacer de nuevo el proceso

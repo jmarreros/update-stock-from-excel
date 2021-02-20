@@ -5,11 +5,11 @@ namespace dcms\update\includes;
 class Configuration{
 
     public function __construct(){
-        add_action('admin_init', [$this, 'init']);
+        add_action('admin_init', [$this, 'init_configuration']);
     }
 
     // Register seccions and fields
-    public function init(){
+    public function init_configuration(){
         register_setting('dcms_usexcel_options_bd', 'dcms_usexcel_options', [$this, 'dcms_validate_cb']);
 
         // Path Section
