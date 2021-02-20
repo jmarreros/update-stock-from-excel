@@ -13,6 +13,22 @@ class Database{
         $this->table_name = $this->wpdb->prefix . 'dcms_update_stock';
     }
 
+    // Insert data
+    public function insert_data( $row ){
+        return $this->wpdb->insert($this->table_name, $row);
+    }
+
+    // Read table with current lastmodified date file
+    public function select_table( $last_modified = false ){
+
+        if ( ! $last_modified ){
+            $last_modified = get_option('dcms_last_modified_file');
+        }
+
+        $sql = "SELECT * FROM {$this->table_name} WHERE date_file = {$last_modified}";
+        return $this->wpdb->get_results($sql);
+    }
+
     // Init activation create table
     public function create_table(){
         $sql = "DROP TABLE IF EXISTS {$this->table_name};

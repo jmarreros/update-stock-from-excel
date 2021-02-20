@@ -7,37 +7,45 @@ use dcms\update\includes\Readfile;
 
 class Process{
     public function __construct(){
-        add_action( 'admin_post_process_form', [$this, 'dcms_process_force_update'] );
+        add_action( 'admin_post_process_form', [$this, 'process_force_update'] );
     }
 
-    public function dcms_process_force_update(){
+    public function process_force_update(){
         $file = new Readfile();
         $last_modified =  $file->file_has_changed();
 
-        $data = $file->get_data_from_file();
-        $headers_ids = $file->get_headers_ids();
-
-        error_log(print_r($data,true));
-        error_log(print_r($headers_ids,true));
-
-        // TODO
-        // Con la data y con el ID de las columnas se podrá insertar
-
-
-        // $data = $file->get_data_from_file();
-
-        // error_log(print_r($data,true));
-
-        // Insert in database table
-        // if ( $last_modified ){
-
-        // }
-
-        //update_option('dcms_last_modified_file', $modified_file );
+        // Validate if the file has changed, then insert into database
+        if ( $last_modified >= get_option('dcms_last_modified_file') ){
+            $this->rows_into_table($file, $last_modified);
+            update_option('dcms_last_modified_file', $last_modified );
+        }
 
         wp_redirect( admin_url('tools.php?page=update-stock-excel&process=1') );
     }
 
+    // Insert data rows into table
+    private function rows_into_table($file, $last_modified){
+
+        $data = $file->get_data_from_file();
+        $headers_ids = $file->get_headers_ids();
+
+        $table = new Database();
+        foreach ($data as $key => $item) {
+            if ( $key == 0 ) continue; // Exclude first line
+
+            $row = [];
+            if ( $item[$headers_ids['sku']] ){
+
+                $row['sku']     = $item[$headers_ids['sku']];
+                $row['stock']   = $item[$headers_ids['stock']];
+                $row['price']   = $item[$headers_ids['price']];
+                $row['date_file'] =  $last_modified;
+
+                $table->insert_data($row);
+            }
+        }
+
+    }
 
 
 }

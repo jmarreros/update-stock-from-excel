@@ -40,7 +40,8 @@ switch ($current_tab){
 function tab_general(){
     ?>
     <h2><?php _e('Log Update', 'dcms-update-stock-excel') ?></h2>
-<?php
+    <?php
+    include_once('partial-log.php');
 }
 
 // - Tab Settings

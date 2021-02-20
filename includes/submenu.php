@@ -25,6 +25,6 @@ class Submenu{
 
     // Callback, show view
     public function submenu_page_callback(){
-        include_once (DCMS_UPDATE_PATH. '/views/configuration.php');
+        include_once (DCMS_UPDATE_PATH. '/views/main-screen.php');
     }
 }
