@@ -94,3 +94,16 @@ $dcms_update_process->init();
 # - En la tabla debe haber una columna de concluído
 # - Verificar fecha del archivo en caso cambie para hacer de nuevo el proceso
 # - Configurar el cron de WordPress
+
+/*
+
+Default
+=======
+
+/Users/jmarreros/www/encurso/wordpress55/excel/INVENTARIO.xlsx
+4
+COD.PRO.
+CANTIDAD
+P.COMPRA
+*/
+

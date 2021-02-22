@@ -12,21 +12,27 @@ class Process{
 
     public function process_force_update(){
         $file = new Readfile();
+
+        // Validation
+        if ( ! $file->file_exists() ) $this->exit_process(0);
+
         $last_modified =  $file->file_has_changed();
 
-
         // Validate if the file has changed, then insert into database
-        // if ( $last_modified >= get_option('dcms_last_modified_file') ){
-        //     $this->rows_into_table($file, $last_modified);
-        //     update_option('dcms_last_modified_file', $last_modified );
-        // }
+        if ( $last_modified >= get_option('dcms_last_modified_file') ){
+            $this->rows_into_table($file, $last_modified);
+            update_option('dcms_last_modified_file', $last_modified );
+        }
 
-        # TODO
-        // usar el limit en la función, guardarlo en wp-options
-
+        // update stock products
         $this->update_products();
 
-        wp_redirect( admin_url('tools.php?page=update-stock-excel&process=1') );
+        $this->exit_process();
+    }
+
+    // Exit process
+    private function exit_process($process_ok = 1){
+        wp_redirect( admin_url('tools.php?page=update-stock-excel&process='.$process_ok) );
         exit();
     }
 
@@ -48,7 +54,7 @@ class Process{
                 $stock = $product->get_stock_quantity();
 
                 // If price has changed
-                if ( $price !== $item->price){
+                if ( ! is_null($item->price) && $price !== $item->price){
                     $this->update_product_price($product, $item->price);
                 }
 
@@ -77,7 +83,16 @@ class Process{
     private function rows_into_table($file, $last_modified){
 
         $data = $file->get_data_from_file();
+
+        // Validate get data from file
+        if ( ! $data ) return false;
+
         $headers_ids = $file->get_headers_ids();
+
+        // Validate required columns
+        if ( $headers_ids['sku'] <= 0 || $headers_ids['stock'] <= 0 ){
+            return false;
+        }
 
         $table = new Database();
         foreach ($data as $key => $item) {
@@ -86,10 +101,13 @@ class Process{
             $row = [];
             if ( $item[$headers_ids['sku']] ){
 
+                $row['date_file'] =  $last_modified;
                 $row['sku']     = $item[$headers_ids['sku']];
                 $row['stock']   = $item[$headers_ids['stock']];
-                $row['price']   = $item[$headers_ids['price']];
-                $row['date_file'] =  $last_modified;
+
+                if ( $headers_ids['price'] >= 0 ){
+                    $row['price']   = $item[$headers_ids['price']];
+                }
 
                 $table->insert_data($row);
             }

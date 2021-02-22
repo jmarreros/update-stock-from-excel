@@ -28,11 +28,7 @@ class Plugin{
             update_option('dcms_usexcel_options', $options);
         }
 
-
-        $modified = get_option('dcms_last_modified_file');
-        if ( empty($modified) ){
-            update_option('dcms_last_modified_file', 0);
-        }
+        update_option('dcms_last_modified_file', 0);
 
         // Create table
         $db = new Database();

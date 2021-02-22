@@ -72,13 +72,13 @@ class Configuration{
                             ['label_for' => 'dcms_usexcel_price_field']
         );
 
-        add_settings_field('dcms_usexcel_isweb_field',
-                            __('Product for web column name','dcms-update-stock-excel'),
-                            [$this, 'dcms_section_input_cb'],
-                            'dcms_usexcel_sfields',
-                            'dcms_usexcel_section_excel',
-                            ['label_for' => 'dcms_usexcel_isweb_field']
-        );
+        // add_settings_field('dcms_usexcel_isweb_field',
+        //                     __('Product for web column name','dcms-update-stock-excel'),
+        //                     [$this, 'dcms_section_input_cb'],
+        //                     'dcms_usexcel_sfields',
+        //                     'dcms_usexcel_section_excel',
+        //                     ['label_for' => 'dcms_usexcel_isweb_field']
+        // );
 
     }
 
@@ -145,7 +145,7 @@ class Configuration{
         $columns['SKU']     = $output['dcms_usexcel_sku_field'];
         $columns['Stock']   = $output['dcms_usexcel_stock_field'];
         $columns['Price']   = $output['dcms_usexcel_price_field'];
-        $columns['Web']   = $output['dcms_usexcel_isweb_field'];
+        // $columns['Web']   = $output['dcms_usexcel_isweb_field'];
 
 
         // Read file and validate sheet_number headers

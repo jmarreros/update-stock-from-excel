@@ -14,6 +14,7 @@ $rows = $db->select_table();
 
     table.dcms-table th,
     table.dcms-table td{
+        text-align:left;
         padding:6px;
         border-bottom:1px solid #ccc;
     }
@@ -34,10 +35,14 @@ $rows = $db->select_table();
         font-weight:bold;
     }
 
+    table tr.updated{
+        background-color:#F4FFED;
+    }
+
 </style>
 <table class="dcms-table">
 <?php foreach ($rows as $key => $item):  ?>
-    <tr>
+    <tr class="<?= $item->updated?'updated':'' ?>" >
     <?php if ( $key == 0 ): ?>
         <th>#</th>
         <th>SKU</th>

@@ -17,8 +17,16 @@ class Readfile{
         $this->path_file = empty($path_file) ? $options['dcms_usexcel_input_file'] : $path_file;
         $this->sheet_number = $options['dcms_usexcel_sheet_field'];
 
-        $this->xlsx = new SimpleXLSX($this->path_file);
+        if ($this->file_exists() ){
+            $this->xlsx = new SimpleXLSX($this->path_file);
+        }
     }
+
+    // File exits
+    public function file_exists(){
+        return file_exists( $this->path_file );
+    }
+
 
     // Get data from file as array
     public function get_data_from_file(){
@@ -44,7 +52,7 @@ class Readfile{
         return $rows[0];
     }
 
-    // Get ids by column name in an array
+    // Get ids by column name in an array, column -1 if not exits
     public function get_headers_ids(){
 
         $headers = $this->get_header($this->sheet_number);
@@ -53,13 +61,17 @@ class Readfile{
         $text_sku       = $options['dcms_usexcel_sku_field'];
         $text_stock     = $options['dcms_usexcel_stock_field'];
         $text_price     = $options['dcms_usexcel_price_field'];
-        $text_filter    = $options['dcms_usexcel_isweb_field'];
 
         $headers_id             = [];
-        $headers_id['sku']      = ($text_sku) ? array_search($text_sku, $headers) : -1;
-        $headers_id['stock']    = ($text_stock) ? array_search($text_stock, $headers) : -1;
-        $headers_id['price']    = ($text_price) ? array_search($text_price, $headers) : -1;
-        $headers_id['filter']   = ($text_filter) ? array_search($text_filter, $headers) : -1;
+
+        $found = array_search($text_sku, $headers);
+        $headers_id['sku'] =  ( ! empty($text_sku) && $found !== false ) ? $found : -1;
+
+        $found = array_search($text_stock, $headers);
+        $headers_id['stock'] =  ( ! empty($text_stock) && $found !== false ) ? $found : -1;
+
+        $found = array_search($text_price, $headers);
+        $headers_id['price'] = ( ! empty($text_price) && $found !== false ) ? $found : -1;
 
         return $headers_id;
     }
