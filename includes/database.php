@@ -41,13 +41,17 @@ class Database{
 
         if ( $limit > 0 ) $sql .= " LIMIT {$limit}";
 
-        // return $this->wpdb->get_results($sql);
-
-        return $sql;
-
-        // TODO
-        // Relacionar con wp_postmeta para obtener directamente el id del producto por SKU
+        return $this->wpdb->get_results($sql);
     }
+
+    // Update log table
+    public function update_table($id_table){
+        $sql = "UPDATE {$this->table_name} SET date_update = NOW(), updated = 1
+                WHERE id = {$id_table}";
+
+        $this->wpdb->query($sql);
+    }
+
 
     // Init activation create table
     public function create_table(){

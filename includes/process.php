@@ -21,18 +21,55 @@ class Process{
         //     update_option('dcms_last_modified_file', $last_modified );
         // }
 
-        $this->update_stock_products();
+        # TODO
+        // usar el limit en la función, guardarlo en wp-options
+
+        $this->update_products();
 
         wp_redirect( admin_url('tools.php?page=update-stock-excel&process=1') );
         exit();
     }
 
     // Update products stock
-    private function update_stock_products(){
+    private function update_products(){
         $table = new Database();
 
-        $sql = $table->select_table_filter();
-        error_log(print_r($sql,true));
+        // Obtenemos los campos a filtrar
+        $items = $table->select_table_filter();
+
+        foreach ($items as $item) {
+
+            // Get the product object
+            $product = wc_get_product( $item->post_id );
+
+            // Validate only simple products
+            if ( $product->get_type() == 'simple'){
+                $price = $product->get_price();
+                $stock = $product->get_stock_quantity();
+
+                // If price has changed
+                if ( $price !== $item->price){
+                    $this->update_product_price($product, $item->price);
+                }
+
+                // If stock has changed
+                if ( $stock !== $item->stock ){
+                    wc_update_product_stock($product, $item->stock);
+                }
+
+                // Update table log
+                $table->update_table($item->id);
+            }
+
+        }
+    }
+
+    // Update price of a specific product object
+    private function update_product_price($product, $new_price){
+        $product->set_regular_price($new_price);
+        $product->set_sale_price($new_price);
+        $product->set_price($new_price);
+        $product->save();
     }
 
 
@@ -60,14 +97,4 @@ class Process{
 
     }
 
-
 }
-
-
-# TODO
-// - Verificar fecha de actualización del archivo
-// - Comparar la fecha de actualización con el registro de wp_options
-// - Si es diferente entonces el archivo fue actualizado, realizar el vaciado de datos
-// - Llenar la tabla de la BD
-// - Llamar a la tarea de actualización
-
