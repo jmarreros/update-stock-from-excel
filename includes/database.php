@@ -29,6 +29,26 @@ class Database{
         return $this->wpdb->get_results($sql);
     }
 
+    // Select table for last modified date and not date_modified related with product id
+    public function select_table_filter($limit = 0){
+
+        $last_modified = get_option('dcms_last_modified_file');
+        $table_postmeta = $this->wpdb->prefix."postmeta";
+
+        $sql = "SELECT us.*, pm.post_id FROM {$this->table_name} us
+                INNER JOIN {$table_postmeta} pm ON us.sku = pm.meta_value AND pm.meta_key = '_sku'
+                WHERE us.date_file = {$last_modified} AND us.date_update IS NULL";
+
+        if ( $limit > 0 ) $sql .= " LIMIT {$limit}";
+
+        // return $this->wpdb->get_results($sql);
+
+        return $sql;
+
+        // TODO
+        // Relacionar con wp_postmeta para obtener directamente el id del producto por SKU
+    }
+
     // Init activation create table
     public function create_table(){
         $sql = "DROP TABLE IF EXISTS {$this->table_name};

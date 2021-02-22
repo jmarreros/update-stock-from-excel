@@ -14,14 +14,27 @@ class Process{
         $file = new Readfile();
         $last_modified =  $file->file_has_changed();
 
+
         // Validate if the file has changed, then insert into database
-        if ( $last_modified >= get_option('dcms_last_modified_file') ){
-            $this->rows_into_table($file, $last_modified);
-            update_option('dcms_last_modified_file', $last_modified );
-        }
+        // if ( $last_modified >= get_option('dcms_last_modified_file') ){
+        //     $this->rows_into_table($file, $last_modified);
+        //     update_option('dcms_last_modified_file', $last_modified );
+        // }
+
+        $this->update_stock_products();
 
         wp_redirect( admin_url('tools.php?page=update-stock-excel&process=1') );
+        exit();
     }
+
+    // Update products stock
+    private function update_stock_products(){
+        $table = new Database();
+
+        $sql = $table->select_table_filter();
+        error_log(print_r($sql,true));
+    }
+
 
     // Insert data rows into table
     private function rows_into_table($file, $last_modified){
