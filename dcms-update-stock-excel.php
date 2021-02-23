@@ -37,6 +37,7 @@ final class Loader{
 		define ('DCMS_UPDATE_PATH', plugin_dir_path( __FILE__ ));
 		define ('DCMS_UPDATE_URL', plugin_dir_url( __FILE__ ));
 		define ('DCMS_UPDATE_BASE_NAME', plugin_basename( __FILE__ ));
+		define ('DCMS_COUNT_BATCH_PROCESS', 5); // Amount of registers to update every time
 	}
 
 	// Load all the files we need

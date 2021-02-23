@@ -50,6 +50,7 @@ $rows = $db->select_table();
         <th>Price</th>
         <th>Updated</th>
         <th>Modified</th>
+        <th>Excluded</th>
     <?php else: ?>
         <td><?= $key; ?></td>
         <td><?= $item->sku ?></td>
@@ -57,6 +58,7 @@ $rows = $db->select_table();
         <td><?= $item->price ?></td>
         <td><?= $item->updated ?></td>
         <td><?= $item->date_update ?></td>
+        <td><?= $item->excluded ?></td>
     <?php endif;
         error_log(print_r($item,true));
     ?>

@@ -37,7 +37,7 @@ class Database{
 
         $sql = "SELECT us.*, pm.post_id FROM {$this->table_name} us
                 INNER JOIN {$table_postmeta} pm ON us.sku = pm.meta_value AND pm.meta_key = '_sku'
-                WHERE us.date_file = {$last_modified} AND us.date_update IS NULL";
+                WHERE us.date_file = {$last_modified} AND us.date_update IS NULL AND excluded = 0";
 
         if ( $limit > 0 ) $sql .= " LIMIT {$limit}";
 
@@ -45,13 +45,20 @@ class Database{
     }
 
     // Update log table
-    public function update_table($id_table){
+    public function update_item_table($id_table){
         $sql = "UPDATE {$this->table_name} SET date_update = NOW(), updated = 1
                 WHERE id = {$id_table}";
 
         $this->wpdb->query($sql);
     }
 
+    // Update exluded register
+    public function exclude_item_table($id_table){
+        $sql = "UPDATE {$this->table_name} SET excluded = 1
+                WHERE id = {$id_table}";
+
+        $this->wpdb->query($sql);
+    }
 
     // Init activation create table
     public function create_table(){
@@ -64,6 +71,7 @@ class Database{
                     `date_update` datetime DEFAULT NULL,
                     `date_file` int(10) unsigned NOT NULL DEFAULT '0',
                     `updated` tinyint(1) DEFAULT '0',
+                    `excluded` tinyint(1) DEFAULT '0',
                     PRIMARY KEY (`id`)
           ) COLLATE={$this->wpdb->collate};
         ";

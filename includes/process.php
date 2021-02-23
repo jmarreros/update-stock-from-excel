@@ -24,8 +24,8 @@ class Process{
             update_option('dcms_last_modified_file', $last_modified );
         }
 
-        // update stock products
-        $this->update_products();
+        // update stock products in batch process
+        $this->update_products(DCMS_COUNT_BATCH_PROCESS);
 
         $this->exit_process();
     }
@@ -37,16 +37,16 @@ class Process{
     }
 
     // Update products stock
-    private function update_products(){
+    private function update_products($count){
         $table = new Database();
 
-        // Obtenemos los campos a filtrar
-        $items = $table->select_table_filter();
+        // Get the items to work with in batch process
+        $items = $table->select_table_filter($count);
 
         foreach ($items as $item) {
 
             // Get the product object
-            $product = wc_get_product( $item->post_id );
+            $product = wc_get_product($item->post_id);
 
             // Validate only simple products
             if ( $product->get_type() == 'simple'){
@@ -64,7 +64,11 @@ class Process{
                 }
 
                 // Update table log
-                $table->update_table($item->id);
+                $table->update_item_table($item->id);
+
+            } else {
+                // Exclude item because is not simple product
+                $table->exclude_item_table($item->id);
             }
 
         }
