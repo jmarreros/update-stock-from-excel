@@ -20,7 +20,7 @@ use dcms\update\includes\Enqueue;
 use dcms\update\includes\Configuration;
 use dcms\update\includes\Readfile;
 use dcms\update\includes\Process;
-
+use dcms\update\includes\Cron;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -38,6 +38,7 @@ final class Loader{
 		define ('DCMS_UPDATE_URL', plugin_dir_url( __FILE__ ));
 		define ('DCMS_UPDATE_BASE_NAME', plugin_basename( __FILE__ ));
 		define ('DCMS_COUNT_BATCH_PROCESS', 5); // Amount of registers to update every time
+		define ('DCMS_INTERVAL_SECONDS', 20); // For cron taks
 	}
 
 	// Load all the files we need
@@ -49,6 +50,7 @@ final class Loader{
 		include_once ( DCMS_UPDATE_PATH . '/includes/readfile.php');
 		include_once ( DCMS_UPDATE_PATH . '/includes/database.php');
 		include_once ( DCMS_UPDATE_PATH . '/includes/process.php');
+		include_once ( DCMS_UPDATE_PATH . '/includes/cron.php');
 		include_once ( DCMS_UPDATE_PATH . '/libs/simplexlsx.php');
 	}
 
@@ -80,6 +82,7 @@ final class Loader{
 		new Enqueue();
 		new Configuration();
 		new Process();
+		new Cron();
 	}
 
 }

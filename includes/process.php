@@ -10,11 +10,21 @@ class Process{
         add_action( 'admin_post_process_form', [$this, 'process_force_update'] );
     }
 
+    // Manual process update
     public function process_force_update(){
+        // Process update with redirection
+        $this->process_update(true);
+    }
+
+    // Automatic process update
+    public function process_update( $redirection = false ){
         $file = new Readfile();
 
         // Validation
-        if ( ! $file->file_exists() ) $this->exit_process(0);
+        if ( ! $file->file_exists() ) {
+            $this->exit_process(0, $redirection);
+            error_log('Excel File does not exists');
+        }
 
         $last_modified =  $file->file_has_changed();
 
@@ -27,12 +37,13 @@ class Process{
         // update stock products in batch process
         $this->update_products(DCMS_COUNT_BATCH_PROCESS);
 
-        $this->exit_process();
+        $this->exit_process(1, $redirection);
+
     }
 
     // Exit process
-    private function exit_process($process_ok = 1){
-        wp_redirect( admin_url('tools.php?page=update-stock-excel&process='.$process_ok) );
+    private function exit_process($process_ok = 1, $redirection){
+        if ( $redirection ) wp_redirect( admin_url('tools.php?page=update-stock-excel&process='.$process_ok) );
         exit();
     }
 
