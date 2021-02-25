@@ -8,7 +8,7 @@ $plugin_tabs['settings'] = "Settings";
 $plugin_tabs['advanced'] = "Advanced";
 
 // Get Current tab
-$current_tab = isset( $_GET['tab'] ) ? $_GET['tab'] : 'advanced';
+$current_tab = isset( $_GET['tab'] ) ? $_GET['tab'] : 'general';
 ?>
 
 <div class="wrap">
