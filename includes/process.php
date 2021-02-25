@@ -32,6 +32,8 @@ class Process{
         if ( $last_modified >= get_option('dcms_last_modified_file') ){
             $this->rows_into_table($file, $last_modified);
             update_option('dcms_last_modified_file', $last_modified );
+
+            error_log(Date("h:i:sa").' - Fecha archivo modificada: '. $last_modified);
         }
 
         // update stock products in batch process
@@ -53,6 +55,8 @@ class Process{
 
         // Get the items to work with in batch process
         $items = $table->select_table_filter($count);
+
+        error_log(Date("h:i:sa").' - Actualizaremos '. $count.' registros');
 
         foreach ($items as $item) {
 

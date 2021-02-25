@@ -4,6 +4,8 @@ use dcms\update\includes\Database;
 
 $db = new Database();
 $rows = $db->select_table();
+$pending = $db->select_table_filter();
+
 ?>
 <style>
     table.dcms-table{
@@ -39,7 +41,19 @@ $rows = $db->select_table();
         background-color:#F4FFED;
     }
 
+    section.msg-top{
+        padding:10px;
+        background-color:#ccc;
+    }
+
 </style>
+
+<section class="msg-top">
+<span><?php echo DCMS_COUNT_BATCH_PROCESS . __(' Items', 'dcms-update-stock-excel') ?></span>
+<span><?php echo __('every ', 'dcms-update-stock-excel') . DCMS_INTERVAL_SECONDS . "s" ?></span>
+-
+<strong><?php echo __('Pending items: ', 'dcms-update-stock-excel') . count($pending) ?></strong>
+</section>
 <table class="dcms-table">
 <?php foreach ($rows as $key => $item):  ?>
     <tr class="<?= $item->updated?'updated':'' ?>" >
@@ -59,9 +73,7 @@ $rows = $db->select_table();
         <td><?= $item->updated ?></td>
         <td><?= $item->date_update ?></td>
         <td><?= $item->excluded ?></td>
-    <?php endif;
-        error_log(print_r($item,true));
-    ?>
+    <?php endif; ?>
     </tr>
 <?php endforeach; ?>
 </table>
