@@ -14,7 +14,7 @@ class Submenu{
     // Register submenu
     public function register_submenu(){
         add_submenu_page(
-            'tools.php',
+            DCMS_SUBMENU,
             __('Update Stock Excel','dcms-update-stock-excel'),
             __('Update Stock Excel','dcms-update-stock-excel'),
             'manage_options',

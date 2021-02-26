@@ -37,8 +37,9 @@ final class Loader{
 		define ('DCMS_UPDATE_PATH', plugin_dir_path( __FILE__ ));
 		define ('DCMS_UPDATE_URL', plugin_dir_url( __FILE__ ));
 		define ('DCMS_UPDATE_BASE_NAME', plugin_basename( __FILE__ ));
-		define ('DCMS_COUNT_BATCH_PROCESS', 100); // Amount of registers to update every time
-		define ('DCMS_INTERVAL_SECONDS', 60); // For cron taks
+		define ('DCMS_SUBMENU', 'edit.php?post_type=product');
+		define ('DCMS_COUNT_BATCH_PROCESS', 5); // Amount of registers to update every time
+		define ('DCMS_INTERVAL_SECONDS', 10); // For cron taks
 	}
 
 	// Load all the files we need

@@ -79,7 +79,7 @@ function plugin_options_tabs($current_tab, $plugin_tabs) {
     echo '<h2 class="nav-tab-wrapper">';
     foreach ( $plugin_tabs as $tab_key => $tab_caption ) {
         $active = $current_tab == $tab_key ? 'nav-tab-active' : '';
-        echo '<a class="nav-tab ' . $active . '" href="?page=update-stock-excel&tab=' . $tab_key . '">' . $tab_caption . '</a>';
+        echo "<a class='nav-tab " . $active . "' href='".admin_url( DCMS_SUBMENU . "&page=update-stock-excel&tab=" . $tab_key )."'>" . $tab_caption . '</a>';
     }
     echo '</h2>';
 }

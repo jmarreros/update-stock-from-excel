@@ -13,7 +13,8 @@ class Process{
     // Manual process update
     public function process_force_update(){
         // Process update with redirection
-        $this->process_update(true);
+        //$this->process_update(true);
+        $this->exit_process(1, $redirection);
     }
 
     // Automatic process update
@@ -45,7 +46,7 @@ class Process{
 
     // Exit process
     private function exit_process($process_ok = 1, $redirection){
-        if ( $redirection ) wp_redirect( admin_url('tools.php?page=update-stock-excel&process='.$process_ok) );
+        if ( $redirection ) wp_redirect( admin_url( DCMS_SUBMENU . '&page=update-stock-excel&process='.$process_ok) );
         exit();
     }
 

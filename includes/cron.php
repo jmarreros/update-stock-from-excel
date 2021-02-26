@@ -24,6 +24,6 @@ class Cron{
 
     // Cron process
     public function dcms_cron_process() {
-        $this->process->process_update();
+        // $this->process->process_update();
     }
 }
