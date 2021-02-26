@@ -65,7 +65,7 @@ class Database{
         $sql = "DROP TABLE IF EXISTS {$this->table_name};
                 CREATE TABLE {$this->table_name} (
                     `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-                    `sku` varchar(50) COLLATE {$this->wpdb->collate} DEFAULT NULL,
+                    `sku` varchar(50) DEFAULT NULL,
                     `stock` int(10) unsigned DEFAULT NULL,
                     `price` decimal(6,2) DEFAULT NULL,
                     `date_update` datetime DEFAULT NULL,
@@ -73,7 +73,7 @@ class Database{
                     `updated` tinyint(1) DEFAULT '0',
                     `excluded` tinyint(1) DEFAULT '0',
                     PRIMARY KEY (`id`)
-          ) COLLATE={$this->wpdb->collate};
+          );
         ";
 
         require_once(ABSPATH . 'wp-admin/includes/upgrade.php');

@@ -23,8 +23,7 @@ class Plugin{
                          'dcms_usexcel_sheet_field' => '3',
                          'dcms_usexcel_sku_field'	=> 'Sku',
                          'dcms_usexcel_stock_field'	=> 'Stock',
-                         'dcms_usexcel_price_field'	=> 'Price',
-                         'dcms_usexcel_isweb_field' => 'Web'
+                         'dcms_usexcel_price_field'	=> 'Price'
                  ];
             update_option('dcms_usexcel_options', $options);
         }

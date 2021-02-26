@@ -72,14 +72,20 @@ class Configuration{
                             ['label_for' => 'dcms_usexcel_price_field']
         );
 
-        // add_settings_field('dcms_usexcel_isweb_field',
-        //                     __('Product for web column name','dcms-update-stock-excel'),
-        //                     [$this, 'dcms_section_input_cb'],
-        //                     'dcms_usexcel_sfields',
-        //                     'dcms_usexcel_section_excel',
-        //                     ['label_for' => 'dcms_usexcel_isweb_field']
-        // );
 
+        add_settings_section('dcms_usexcel_section_cron',
+                        __('Cron','dcms-update-stock-excel'),
+                                [$this,'dcms_section_cb'],
+                                'dcms_usexcel_sfields' );
+
+        add_settings_field('dcms_usexcel_cron_field',
+                            __('Activate cron','dcms-update-stock-excel'),
+                            [$this, 'dcms_section_check_cb'],
+                            'dcms_usexcel_sfields',
+                            'dcms_usexcel_section_cron',
+                            ['label_for' => 'dcms_usexcel_cron_field',
+                             'description' => __('Enable or disable cron','dcms-update-stock-excel')]
+        );
     }
 
     // Callback section
@@ -100,9 +106,25 @@ class Configuration{
         printf("<input id='%s' name='dcms_usexcel_options[%s]' type='text' value='%s' %s %s>",
                 $id, $id, $val, $req, $class);
 
-        if ( $desc ) printf("<p class='description'>%s</p>", $desc);
+        if ( $desc ) printf("<p class='description'>%s</p> ", $desc);
 
     }
+
+
+    public function dcms_section_check_cb( $args ){
+
+        $id = $args['label_for'];
+        $desc = isset($args['description']) ? $args['description'] : '';
+        $options = get_option( 'dcms_usexcel_options' );
+        $val = checked(isset( $options[$id] ), true, false);
+
+        printf("<input id='%s' name='dcms_usexcel_options[%s]' type='checkbox' %s > %s",
+        $id, $id, $val, $desc);
+
+	}
+
+
+
 
     // Inputs fields sanitation and validation
     public function dcms_validate_cb($input){
@@ -119,10 +141,10 @@ class Configuration{
         $path_file = $output['dcms_usexcel_input_file'];
 
         // Validate file path
-        $this->validate_path_file($path_file);
-
-        // validate columns
-        $this->validate_columns_file($path_file, $output);
+        if ( $this->validate_path_file($path_file) ){
+            // validate columns
+            $this->validate_columns_file($path_file, $output);
+        }
 
         return $output;
     }
@@ -132,7 +154,9 @@ class Configuration{
     private function validate_path_file($path_file){
         if ( ! file_exists($path_file) ) {
             add_settings_error( 'dcms_messages', 'dcms_file_error', __( 'File doesn\'t exists', 'dcms-update-stock-excel' ), 'error' );
+            return false;
         }
+        return true;
     }
 
     // Validate that columns' file exists
@@ -167,3 +191,15 @@ class Configuration{
     }
 
 }
+
+
+
+// add_settings_field('dcms_usexcel_isweb_field',
+//                     __('Product for web column name','dcms-update-stock-excel'),
+//                     [$this, 'dcms_section_input_cb'],
+//                     'dcms_usexcel_sfields',
+//                     'dcms_usexcel_section_excel',
+//                     ['label_for' => 'dcms_usexcel_isweb_field']
+// );
+
+

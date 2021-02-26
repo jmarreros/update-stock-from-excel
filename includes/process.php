@@ -13,8 +13,7 @@ class Process{
     // Manual process update
     public function process_force_update(){
         // Process update with redirection
-        //$this->process_update(true);
-        $this->exit_process(1, $redirection);
+        $this->process_update(true);
     }
 
     // Automatic process update

@@ -24,6 +24,16 @@ class Cron{
 
     // Cron process
     public function dcms_cron_process() {
+        $options = get_option( 'dcms_usexcel_options' );
+        $cron_enabled = isset( $options['dcms_usexcel_cron_field'] );
+
+        if ( $cron_enabled ){
+            error_log('Habilitado');
+        } else {
+            error_log('Deshabilitado');
+        }
+
+
         // $this->process->process_update();
     }
 }
