@@ -28,12 +28,8 @@ class Cron{
         $cron_enabled = isset( $options['dcms_usexcel_cron_field'] );
 
         if ( $cron_enabled ){
-            error_log('Habilitado');
-        } else {
-            error_log('Deshabilitado');
+            $this->process->process_update();
         }
-
-
-        // $this->process->process_update();
+        error_log('Mi evento se ejecutó: '.Date("h:i:sa"));
     }
 }

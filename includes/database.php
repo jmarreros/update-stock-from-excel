@@ -62,8 +62,7 @@ class Database{
 
     // Init activation create table
     public function create_table(){
-        $sql = "DROP TABLE IF EXISTS {$this->table_name};
-                CREATE TABLE {$this->table_name} (
+        $sql = " CREATE TABLE IF NOT EXISTS {$this->table_name} (
                     `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
                     `sku` varchar(50) DEFAULT NULL,
                     `stock` int(10) unsigned DEFAULT NULL,

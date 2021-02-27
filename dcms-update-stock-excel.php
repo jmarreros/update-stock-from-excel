@@ -39,7 +39,7 @@ final class Loader{
 		define ('DCMS_UPDATE_BASE_NAME', plugin_basename( __FILE__ ));
 		define ('DCMS_SUBMENU', 'edit.php?post_type=product');
 		define ('DCMS_COUNT_BATCH_PROCESS', 200); // Amount of registers to update every time
-		define ('DCMS_INTERVAL_SECONDS', 120); // For cron taks
+		define ('DCMS_INTERVAL_SECONDS', 900); // For cron taks
 	}
 
 	// Load all the files we need
@@ -67,7 +67,7 @@ final class Loader{
 	public function add_link_plugin(){
 		add_action( 'plugin_action_links_' . plugin_basename( __FILE__ ), function( $links ){
 			return array_merge( array(
-				'<a href="' . esc_url( admin_url( '/tools.php?page=update-stock-excel' ) ) . '">' . __( 'Settings', 'dcms-update-stock-excel' ) . '</a>'
+				'<a href="' . esc_url( admin_url( DCMS_SUBMENU . '&page=update-stock-excel' ) ) . '">' . __( 'Settings', 'dcms-update-stock-excel' ) . '</a>'
 			), $links );
 		} );
 	}
