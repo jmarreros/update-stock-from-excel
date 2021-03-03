@@ -37,7 +37,7 @@ class Database{
 
         $sql = "SELECT us.*, pm.post_id FROM {$this->table_name} us
                 INNER JOIN {$table_postmeta} pm ON us.sku = pm.meta_value AND pm.meta_key = '_sku'
-                WHERE us.date_file = {$last_modified} AND us.date_update IS NULL AND excluded = 0";
+                WHERE us.date_file = {$last_modified} AND us.date_update IS NULL AND us.excluded = 0 AND us.state = 1";
 
         if ( $limit > 0 ) $sql .= " LIMIT {$limit}";
 
@@ -65,19 +65,25 @@ class Database{
         $sql = " CREATE TABLE IF NOT EXISTS {$this->table_name} (
                     `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
                     `sku` varchar(50) DEFAULT NULL,
+                    `product` varchar(250) DEFAULT NULL,
                     `stock` int(10) unsigned DEFAULT NULL,
                     `price` decimal(6,2) DEFAULT NULL,
+                    `state` tinyint(1) DEFAULT '1',
                     `date_update` datetime DEFAULT NULL,
                     `date_file` int(10) unsigned NOT NULL DEFAULT '0',
                     `updated` tinyint(1) DEFAULT '0',
                     `excluded` tinyint(1) DEFAULT '0',
                     PRIMARY KEY (`id`)
-          );
-        ";
+          )";
 
         require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-
         dbDelta($sql);
+    }
+
+    // Truncate table
+    public function truncate_table(){
+        $sql = "TRUNCATE TABLE {$this->table_name};";
+        $this->wpdb->query($sql);
     }
 }
 

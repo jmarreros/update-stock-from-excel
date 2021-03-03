@@ -10,9 +10,8 @@ class Process{
         add_action( 'admin_post_process_form', [$this, 'process_force_update'] );
     }
 
-    // Manual process update
+    // Manual process update - with redirection
     public function process_force_update(){
-        // Process update with redirection
         $this->process_update(true);
     }
 
@@ -22,7 +21,7 @@ class Process{
 
         // Validation
         if ( ! $file->file_exists() ) {
-            $this->exit_process(0, $redirection);
+            exit_process(0, $redirection);
             error_log('Excel File does not exists');
         }
 
@@ -30,24 +29,25 @@ class Process{
 
         // Validate if the file has changed, then insert into database
         if ( $last_modified >= get_option('dcms_last_modified_file') ){
+
             $this->rows_into_table($file, $last_modified);
             update_option('dcms_last_modified_file', $last_modified );
 
             error_log(Date("h:i:sa").' - Fecha archivo modificada: '. $last_modified);
+            // TODO
+            // wp_update_post( array( 'ID' => $product->get_id(), 'post_status' => 'pending' ) );
+            // Todos los que tienen 0 y existen los actualizo, despublicado
+            // Todos los que tienen 0 y no existen los creo y despublicado
+            // Hacer un left join
         }
 
         // update stock products in batch process
         $this->update_products(DCMS_COUNT_BATCH_PROCESS);
 
-        $this->exit_process(1, $redirection);
+        exit_process(1, $redirection);
 
     }
 
-    // Exit process
-    private function exit_process($process_ok = 1, $redirection){
-        if ( $redirection ) wp_redirect( admin_url( DCMS_SUBMENU . '&page=update-stock-excel&process='.$process_ok) );
-        exit();
-    }
 
     // Update products stock
     private function update_products($count){
@@ -98,7 +98,7 @@ class Process{
     }
 
 
-    // Insert data rows into table
+    // Insert data rows into custom table
     private function rows_into_table($file, $last_modified){
 
         $data = $file->get_data_from_file();
@@ -109,11 +109,15 @@ class Process{
         $headers_ids = $file->get_headers_ids();
 
         // Validate required columns
-        if ( $headers_ids['sku'] <= 0 || $headers_ids['stock'] <= 0 ){
+        if ( $headers_ids['sku'] < 0 || $headers_ids['stock'] < 0 ){
             return false;
         }
 
         $table = new Database();
+
+        // Clear data
+        $table->truncate_table();
+
         foreach ($data as $key => $item) {
             if ( $key == 0 ) continue; // Exclude first line
 
@@ -128,6 +132,14 @@ class Process{
                     $row['price']   = $item[$headers_ids['price']];
                 }
 
+                if ( $headers_ids['state'] >= 0 ){
+                    $row['state']   = $item[$headers_ids['state']];
+                }
+
+                if ( $headers_ids['product'] >= 0 ){
+                    $row['product']   = $item[$headers_ids['product']];
+                }
+
                 $table->insert_data($row);
             }
         }
@@ -135,3 +147,6 @@ class Process{
     }
 
 }
+
+// Verify state for create products
+// Truncar la tabla para empezar de 0

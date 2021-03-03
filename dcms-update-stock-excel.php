@@ -44,6 +44,7 @@ final class Loader{
 
 	// Load all the files we need
 	public function load_includes(){
+		include_once ( DCMS_UPDATE_PATH . '/helpers/helper.php');
 		include_once ( DCMS_UPDATE_PATH . '/includes/plugin.php');
 		include_once ( DCMS_UPDATE_PATH . '/includes/submenu.php');
 		include_once ( DCMS_UPDATE_PATH . '/includes/enqueue.php');
@@ -80,10 +81,10 @@ final class Loader{
 		$this->add_link_plugin();
 		new Plugin();
 		new SubMenu();
-		new Enqueue();
 		new Configuration();
 		new Process();
 		new Cron();
+		// new Enqueue();
 	}
 
 }
@@ -92,7 +93,6 @@ $dcms_update_process = new Loader();
 $dcms_update_process->init();
 
 
-#TODO
 # - Comprobar si el archivo esta actualizado
 # - Hacer la actualización manualmente
 # - llenar todo en una tabla de BD
@@ -100,15 +100,17 @@ $dcms_update_process->init();
 # - Verificar fecha del archivo en caso cambie para hacer de nuevo el proceso
 # - Configurar el cron de WordPress
 
+# - Para usar el estado
+# - Sólo actualizar los que tienen estado 1
+# - Si tiene estado 0, buscar si existe producto, sino existe crearlo, si existe sólo despublicarlo
+
 /*
-
-Default
-=======
-
-/Users/jmarreros/www/encurso/wordpress55/excel/INVENTARIO.xlsx
-4
+Default FIELDS
+--------------
 COD.PRO.
 CANTIDAD
 P.COMPRA
+DESCRIPCIÓN DEL PRODUCTO
+ESTADO
 */
 

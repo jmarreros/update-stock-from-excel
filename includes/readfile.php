@@ -61,8 +61,10 @@ class Readfile{
         $text_sku       = $options['dcms_usexcel_sku_field'];
         $text_stock     = $options['dcms_usexcel_stock_field'];
         $text_price     = $options['dcms_usexcel_price_field'];
+        $text_state     = $options['dcms_usexcel_state_field'];
+        $text_product   = $options['dcms_usexcel_product_field'];
 
-        $headers_id             = [];
+        $headers_id     = [];
 
         $found = array_search($text_sku, $headers);
         $headers_id['sku'] =  ( ! empty($text_sku) && $found !== false ) ? $found : -1;
@@ -72,6 +74,12 @@ class Readfile{
 
         $found = array_search($text_price, $headers);
         $headers_id['price'] = ( ! empty($text_price) && $found !== false ) ? $found : -1;
+
+        $found = array_search($text_state, $headers);
+        $headers_id['state'] = ( ! empty($text_state) && $found !== false ) ? $found : -1;
+
+        $found = array_search($text_product, $headers);
+        $headers_id['product'] = ( ! empty($text_product) && $found !== false ) ? $found : -1;
 
         return $headers_id;
     }

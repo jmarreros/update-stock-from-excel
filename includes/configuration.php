@@ -73,6 +73,25 @@ class Configuration{
         );
 
 
+        add_settings_field('dcms_usexcel_product_field',
+                            __('Product column name','dcms-update-stock-excel'),
+                            [$this, 'dcms_section_input_cb'],
+                            'dcms_usexcel_sfields',
+                            'dcms_usexcel_section_excel',
+                            ['label_for' => 'dcms_usexcel_product_field']
+                        );
+
+
+        add_settings_field('dcms_usexcel_state_field',
+                            __('State column name','dcms-update-stock-excel'),
+                            [$this, 'dcms_section_input_cb'],
+                            'dcms_usexcel_sfields',
+                            'dcms_usexcel_section_excel',
+                            ['label_for' => 'dcms_usexcel_state_field',
+                             'description' => __('Column with values: 1 publish - 0 Unpublish','dcms-update-stock-excel')]
+        );
+
+
         add_settings_section('dcms_usexcel_section_cron',
                         __('Cron','dcms-update-stock-excel'),
                                 [$this,'dcms_section_cb'],
@@ -169,8 +188,8 @@ class Configuration{
         $columns['SKU']     = $output['dcms_usexcel_sku_field'];
         $columns['Stock']   = $output['dcms_usexcel_stock_field'];
         $columns['Price']   = $output['dcms_usexcel_price_field'];
-        // $columns['Web']   = $output['dcms_usexcel_isweb_field'];
-
+        $columns['State']   = $output['dcms_usexcel_state_field'];
+        $columns['Product'] = $output['dcms_usexcel_product_field'];
 
         // Read file and validate sheet_number headers
         $readfile = new Readfile($path_file);
