@@ -85,6 +85,12 @@ class Database{
         $sql = "TRUNCATE TABLE {$this->table_name};";
         $this->wpdb->query($sql);
     }
+
+    // Detelete table on desactivate
+    public function drop_table(){
+        $sql = "DROP TABLE IF EXISTS {$this->table_name};";
+        $this->wpdb->query($sql);
+    }
 }
 
 
